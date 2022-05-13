@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  frameworkbackup:  
+    build:
+      context: ./
+      dockerfile: dockerfile    
+    volumes:
+      - ./results:/results
+      - ./settings:/settings
+      
+      

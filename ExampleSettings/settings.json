@@ -1,0 +1,26 @@
+{ 
+	"DATABASES" : {
+        "backup": {
+            "ENGINE": "sql_server.pyodbc",
+            "NAME": "database",
+            "USER": "user",
+            "PASSWORD": "pwd",
+            "HOST": "Server",
+            "OPTIONS": {
+                "driver": "ODBC Driver 17 for SQL Server",
+                "extra_params":"App=backup_conection"
+            }
+        },
+        "restore": {
+            "ENGINE": "sql_server.pyodbc",
+            "NAME": "database",
+            "USER": "user",
+            "PASSWORD": "pwd",
+            "HOST": "Server",
+            "OPTIONS": {
+                "driver": "ODBC Driver 17 for SQL Server",
+                "extra_params":"App=backup_conection"
+            }
+        }                
+    }
+}
