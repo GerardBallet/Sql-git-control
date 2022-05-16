@@ -18,10 +18,10 @@ That files allow you to have a control version of the content of a tables, follo
 
 # Settings
 
-For use that tool you must to configure a setting file. An example of that file could by found [here](\ExampleSettings\settings.json). and put it on [that directory](settings).
+For use that tool you must to configure a setting file. An example of that file could by found [here](ExampleSettings\settings.json). and put it on [that directory](settings).
 
 # Run Scripts generation
 
 ´´´
-docker-compose up
+docker-compose up --build
 ´´´
