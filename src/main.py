@@ -1,8 +1,8 @@
-from sqlTools.SqlTablesUtils import generateTablesRegistersScript
+from sqlTools.SqlTablesUtils import generateTablesScripts
 from sqlTools.FilesManage import clean_scripts_folder
 import sqlTools.SqlObjectDefinition as ObjDef
 clean_scripts_folder()
-generateTablesRegistersScript()
+generateTablesScripts()
 
 ObjDef.create_script_functions_definition()
 ObjDef.create_script_procedures_definition()

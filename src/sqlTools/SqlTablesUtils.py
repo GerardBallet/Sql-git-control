@@ -34,8 +34,27 @@ def create_script_tables_registers(connexion,tableName, outputfile=True):
     return cursor.fetchall()
 
 
+sql_script_for_generate_definition_script =readSqlScriptContent('getTableDefinition.sql')
 
-def generateTablesRegistersScript():
+def create_script_tables_definition(connexion,tableName, outputfile=True):
+    cursor = connexion.cursor()    
+    cursor.execute(sql_script_for_generate_definition_script.replace('${0}',tableName)) 
+    if outputfile:
+        checkDir('Tables')
+        checkDir('Tables/Definition')
+        try:
+            content =cursor.fetchall()[0][0]
+            if not content:
+                return
+            writeSqlScriptContent('Tables/Definition/'+tableName+'.sql',content)
+        except:
+            print(content)
+            raise
+        return
+    return cursor.fetchall()
+
+
+def generateTablesScripts():
     print('creating inserts scripts')
     print('#'*60)
     
@@ -43,9 +62,11 @@ def generateTablesRegistersScript():
     for i in range(len(tables)):    
         try:
             create_script_tables_registers(BackupConnection,tables[i][0])
+            create_script_tables_definition(BackupConnection,tables[i][0])
             print(f'script for table {tables[i][0]} done')
         except:
             print(f'!!!! Error when doing script for table {tables[i][0]} !!!!!')
             
             raise    
     print('Task finished')
+
