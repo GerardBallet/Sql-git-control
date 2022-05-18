@@ -22,6 +22,6 @@ For use that tool you must to configure a setting file. An example of that file 
 
 # Run Scripts generation
 
-´´´
+``
 docker-compose up --build
-´´´
+``
