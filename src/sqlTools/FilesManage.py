@@ -11,7 +11,7 @@ def checkDir(dir):
 
 def readFileContent(path):    
     file=os.path.join(main_directory, path)
-    text_file = open(file, "r")
+    text_file = open(file, "r",encoding='utf-8')
     
     #read whole file to a string
     data = text_file.read()
@@ -26,7 +26,7 @@ def readSqlScriptContent(file):
     
 def writeFileContent(path,content):    
     file=os.path.join(main_directory, path)
-    f = open(file, "a")
+    f = open(file, "a",encoding='utf-8')
     f.write(content)
     f.close()
 

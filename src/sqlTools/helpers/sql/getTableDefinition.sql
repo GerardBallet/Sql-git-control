@@ -3,9 +3,10 @@ set nocount on
 
 declare @table_name nvarchar(max)='${0}'
 declare @query varchar(max) =''
+declare @query_aux varchar(max) =''
 declare @schema varchar(max)
 
-  SELECT @schema = OBJECT_SCHEMA_NAME(OBJECT_ID)
+SELECT @schema = OBJECT_SCHEMA_NAME(OBJECT_ID)
 
 FROM sys.objects
 WHERE type  IN ('U')
@@ -57,9 +58,9 @@ declare @clustered varchar(max)
  
 
  if @primarykey is not null begin 
-  set @query =@query +'ALTER TABLE ['+@schema+'].['+@table_name+']  ADD CONSTRAINT '+@primarykey+' PRIMARY KEY '+case when @clustered='CLUSTERED'then 'CLUSTERED' else '' end+' ('
+  set @query_aux ='ALTER TABLE ['+@schema+'].['+@table_name+']  ADD CONSTRAINT '+@primarykey+' PRIMARY KEY '+case when @clustered='CLUSTERED'then 'CLUSTERED' else '' end+' ('
   
-  set @query=@query+(
+  set @query_aux=@query_aux+(
 	select replace(replace(STUFF((
 		select a.ColumnName+' ' from (
 		  SELECT     
@@ -81,7 +82,8 @@ declare @clustered varchar(max)
 		FOR XML PATH('')
          ), 1, 0, ''),'&#x0D;',CHAR(13) ),'&gt;','>'))
 
-	set @query =@query +')'+char(13)+char(10)+'GO'+char(13)+char(10)
+	set @query_aux =@query_aux +')'+char(13)+char(10)+'GO'+char(13)+char(10)
+	set @query =@query +isnull(@query_aux,'')
  end
 
 
@@ -89,7 +91,7 @@ declare @clustered varchar(max)
 
 /*Deafult values*/
 
-set @query=@query+(
+set @query_aux=(
 select replace(replace(STUFF(( 
 select a.field+char(13)+char(10) +'GO'+char(13)+char(10) from (
 select 'ALTER TABLE ['+@schema + '].['+@table_name+'] ADD  DEFAULT '+COLUMN_DEFAULT+' FOR ['+COLUMN_NAME+'] ' as field
@@ -102,7 +104,7 @@ FOR XML PATH('')
 
 
 
-set @query=@query+(
+set @query_aux=@query_aux+(
 select replace(replace(STUFF((
 select 'ALTER TABLE ['+main_table_schema+'].['+main_table+']  WITH CHECK ADD  CONSTRAINT ['+a.constraint_name+'] FOREIGN KEY('+a.main_table_cols+')'+char(13)+char(10)+
 
@@ -165,5 +167,5 @@ select 'ALTER TABLE ['+main_table_schema+'].['+main_table+']  WITH CHECK ADD  CO
 	order by main_table
 	FOR XML PATH('')
          ), 1, 0, ''),'&#x0D;',CHAR(13) ),'&gt;','>')  as code)
-
+set @query =@query +isnull(@query_aux,'')
 select @query
