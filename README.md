@@ -6,7 +6,7 @@ That tool is a set of scripts that allow generate a script for every table on yo
 That files allow you to have a control version of the content of a tables, following the steps below.
 
 + Run the scripts on that project (every time you want a instance of your database content)
-+ Copy the files on [results](results) folder and copy them to your git repository 
++ Copy the files on results folder and copy them to your git repository 
 + Commit and Push your changes 
 
 
