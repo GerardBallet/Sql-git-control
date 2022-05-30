@@ -61,11 +61,11 @@ def generateTablesScripts():
     tables = getTablesList(BackupConnection)
     for i in range(len(tables)):    
         try:
-            create_script_tables_registers(BackupConnection,tables[i][0])
-            create_script_tables_definition(BackupConnection,tables[i][0])
-            print(f'script for table {tables[i][0]} done')
+            create_script_tables_registers(BackupConnection,tables[i][1])
+            create_script_tables_definition(BackupConnection,tables[i][1])
+            print(f'script for table [{tables[i][0]}].[{tables[i][1]}] done')
         except:
-            print(f'!!!! Error when doing script for table {tables[i][0]} !!!!!')
+            print(f'!!!! Error when doing script for table [{tables[i][0]}].[{tables[i][1]}] !!!!!')
             
             raise    
     print('Task finished')
