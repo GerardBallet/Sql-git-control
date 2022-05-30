@@ -16,9 +16,9 @@ def getTablesList(connexion):
 #Tables ordered by hyerarchy
 sql_script_for_generate_insert_script =readSqlScriptContent('crate_inserts_registers_script.sql')
 
-def create_script_tables_registers(connexion,tableName, outputfile=True):
+def create_script_tables_registers(connexion,tableSchemaName, tableName, outputfile=True):
     cursor = connexion.cursor()    
-    cursor.execute(sql_script_for_generate_insert_script.replace('${0}',tableName)) 
+    cursor.execute(sql_script_for_generate_insert_script.replace('${0}',tableName).replace('${1}',tableSchemaName)) 
     if outputfile:
         checkDir('Tables')
         checkDir('Tables/Registers')
@@ -26,7 +26,7 @@ def create_script_tables_registers(connexion,tableName, outputfile=True):
             content =cursor.fetchall()[0][0]
             if not content:
                 return
-            writeSqlScriptContent('Tables/Registers/'+tableName+'.sql',content)
+            writeSqlScriptContent(f"""Tables/Registers/{tableSchemaName}.{tableName}.sql""",content)
         except:
             print(content)
             raise
@@ -36,9 +36,9 @@ def create_script_tables_registers(connexion,tableName, outputfile=True):
 
 sql_script_for_generate_definition_script =readSqlScriptContent('getTableDefinition.sql')
 
-def create_script_tables_definition(connexion,tableName, outputfile=True):
+def create_script_tables_definition(connexion,tableSchemaName,tableName, outputfile=True):
     cursor = connexion.cursor()    
-    cursor.execute(sql_script_for_generate_definition_script.replace('${0}',tableName)) 
+    cursor.execute(sql_script_for_generate_definition_script.replace('${0}',tableName).replace('${1}',tableSchemaName)) 
     if outputfile:
         checkDir('Tables')
         checkDir('Tables/Definition')
@@ -46,7 +46,7 @@ def create_script_tables_definition(connexion,tableName, outputfile=True):
             content =cursor.fetchall()[0][0]
             if not content:
                 return
-            writeSqlScriptContent('Tables/Definition/'+tableName+'.sql',content)
+            writeSqlScriptContent(f'Tables/Definition/{tableSchemaName}.{tableName}.sql',content)
         except:
             print(content)
             raise
@@ -61,8 +61,8 @@ def generateTablesScripts():
     tables = getTablesList(BackupConnection)
     for i in range(len(tables)):    
         try:
-            create_script_tables_registers(BackupConnection,tables[i][1])
-            create_script_tables_definition(BackupConnection,tables[i][1])
+            create_script_tables_registers(BackupConnection,tables[i][0],tables[i][1])
+            create_script_tables_definition(BackupConnection,tables[i][0],tables[i][1])
             print(f'script for table [{tables[i][0]}].[{tables[i][1]}] done')
         except:
             print(f'!!!! Error when doing script for table [{tables[i][0]}].[{tables[i][1]}] !!!!!')

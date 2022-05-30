@@ -4,13 +4,9 @@ set nocount on
 declare @table_name nvarchar(max)='${0}'
 declare @query varchar(max) =''
 declare @query_aux varchar(max) =''
-declare @schema varchar(max)
+declare @schema varchar(max)= '${1}'
 
-SELECT @schema = OBJECT_SCHEMA_NAME(OBJECT_ID)
 
-FROM sys.objects
-WHERE type  IN ('U')
-and name =@table_name
 
 /* Table main definition*/
 

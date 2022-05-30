@@ -4,7 +4,8 @@ DECLARE @TABLE_NAME NVARCHAR(MAX) ='${0}',
         @CSV_COLUMN NVARCHAR(MAX),
         @QUOTED_DATA NVARCHAR(MAX),    
         @TEXT NVARCHAR(MAX),
-		@order_file NVARCHAR(MAX)
+		@order_file NVARCHAR(MAX),
+		@schema varchar(max)= '${1}'
 
 declare @backup_table_aux table(query Nvarchar(max),[orden] int)
 
@@ -41,7 +42,7 @@ SELECT @CSV_COLUMN=STUFF
 		 WHERE OBJECT_ID=OBJECT_ID(@TABLE_NAME) AND 
 		 is_identity!=1 )
 	
-	SELECT @TEXT='SELECT case when ROW_NUMBER() OVER(ORDER BY '+@order_file+') =1 then ''INSERT INTO '+@TABLE_NAME+'('+@CSV_COLUMN+') VALUES'' else '','' end + '' ('''+'+'+SUBSTRING(@QUOTED_DATA,1,LEN(@QUOTED_DATA)-5)+'+'+''')'''+' Insert_Scripts, ROW_NUMBER() OVER(ORDER BY '+@order_file+') as [orden]FROM '+@TABLE_NAME
+	SELECT @TEXT='SELECT case when ROW_NUMBER() OVER(ORDER BY '+@order_file+') =1 then ''INSERT INTO ['+@schema+'].['+@TABLE_NAME+']('+@CSV_COLUMN+') VALUES'' else '','' end + '' ('''+'+'+SUBSTRING(@QUOTED_DATA,1,LEN(@QUOTED_DATA)-5)+'+'+''')'''+' Insert_Scripts, ROW_NUMBER() OVER(ORDER BY '+@order_file+') as [orden]FROM '+@TABLE_NAME
 
 
 
