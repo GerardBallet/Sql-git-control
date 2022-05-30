@@ -16,8 +16,8 @@ def createObjectScripts(object_type,path,sql_type):
     print(f"creating {object_type} definition scripts")
     print('#'*20)
     for object in result: 
-        print(f"script for {object_type} definition {object[1]}")        
-        writeSqlScriptContent(path+'/'+object[1]+'.sql',object[0])
+        print(f"script for {object_type} definition [{object[1]}].[{object[2]}]")        
+        writeSqlScriptContent(f'{path}/{object[1]}.{object[2]}.sql',object[0])
     print('Task finished')
     return 
 
